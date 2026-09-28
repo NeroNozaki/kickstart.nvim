@@ -110,7 +110,7 @@ do
   vim.o.number = true
   -- You can also add relative line numbers, to help with jumping.
   --  Experiment for yourself to see if you like it!
-  -- vim.o.relativenumber = true
+  vim.o.relativenumber = true
 
   -- Enable mouse mode, can be useful for resizing splits for example!
   vim.o.mouse = 'a'
@@ -195,7 +195,7 @@ do
 
     -- Can switch between these as you prefer
     virtual_text = true, -- Text shows up at the end of the line
-    virtual_lines = false, -- Text shows up underneath the line, with virtual lines
+    virtual_lines = true, -- Text shows up underneath the line, with virtual lines
 
     -- Auto open the float, so you can easily read the errors when jumping with `[d` and `]d`
     jump = {
@@ -208,6 +208,11 @@ do
       end,
     },
   }
+
+  -- Makes the cursor stay in place when leaving insert mode
+  vim.api.nvim_create_autocmd('InsertLeave', {
+    callback = function() vim.cmd 'normal! `^' end,
+  })
 
   vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
 
@@ -240,6 +245,14 @@ do
   -- vim.keymap.set("n", "<C-S-j>", "<C-w>J", { desc = "Move window to the lower" })
   -- vim.keymap.set("n", "<C-S-k>", "<C-w>K", { desc = "Move window to the upper" })
 
+  -- Delete previous word (Ctrl-Backspace)
+  vim.keymap.set('i', '<C-BS>', '<C-w>', { desc = 'Delete previous word' })
+  -- Many terminals actually send <C-h> for Ctrl-Backspace
+  -- vim.keymap.set('i', '<C-h>', '<C-w>', { desc = 'Delete previous word' })
+
+  -- Delete next word (Ctrl-Delete)
+  vim.keymap.set('i', '<C-Del>', '<C-o>dw', { desc = 'Delete next word' })
+
   -- [[ Basic Autocommands ]]
   --  See `:help lua-guide-autocommands`
 
@@ -249,7 +262,7 @@ do
   vim.api.nvim_create_autocmd('TextYankPost', {
     desc = 'Highlight when yanking (copying) text',
     group = vim.api.nvim_create_augroup('kickstart-highlight-yank', { clear = true }),
-    callback = function() vim.hl.on_yank() end,
+    callback = function() vim.hl.hl_op() end,
   })
 end
 
@@ -406,7 +419,7 @@ do
   vim.pack.add { gh 'folke/which-key.nvim' }
   require('which-key').setup {
     -- Delay between pressing a key and opening which-key (milliseconds)
-    delay = 0,
+    delay = 500,
     icons = { mappings = vim.g.have_nerd_font },
     -- Document existing key chains
     spec = {
@@ -426,6 +439,7 @@ do
   vim.pack.add { gh 'folke/tokyonight.nvim' }
   ---@diagnostic disable-next-line: missing-fields
   require('tokyonight').setup {
+    transparent = true,
     styles = {
       comments = { italic = false }, -- Disable italics in comments
     },
@@ -434,7 +448,7 @@ do
   -- Load the colorscheme here.
   -- Like many other themes, this one has different styles, and you could load
   -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
-  vim.cmd.colorscheme 'tokyonight-night'
+  vim.cmd.colorscheme 'tokyonight-moon'
 
   -- Highlight todo, notes, etc in comments
   vim.pack.add { gh 'folke/todo-comments.nvim' }
@@ -524,6 +538,7 @@ do
     gh 'nvim-lua/plenary.nvim',
     gh 'nvim-telescope/telescope.nvim',
     gh 'nvim-telescope/telescope-ui-select.nvim',
+    gh 'jonarrien/telescope-cmdline.nvim',
   }
   if vim.fn.executable 'make' == 1 then table.insert(telescope_plugins, gh 'nvim-telescope/telescope-fzf-native.nvim') end
 
@@ -536,19 +551,41 @@ do
     --  All the info you're looking for is in `:help telescope.setup()`
     --
     -- defaults = {
+    --
     --   mappings = {
     --     i = { ['<c-enter>'] = 'to_fuzzy_refine' },
+    --
     --   },
     -- },
     -- pickers = {}
     extensions = {
       ['ui-select'] = { require('telescope.themes').get_dropdown() },
+      cmdline = {
+        -- Adjust telescope picker size and layout
+        picker = {
+          layout_config = {
+            width = 120,
+            height = 25,
+          },
+        },
+        -- Adjust your mappings
+        mappings = {
+          complete = '<Tab>',
+          run_selection = '<C-CR>',
+          run_input = '<CR>',
+        },
+        -- Triggers any shell command using overseer.nvim (`:!`)
+        overseer = {
+          enabled = true,
+        },
+      },
     },
   }
 
   -- Enable Telescope extensions if they are installed
   pcall(require('telescope').load_extension, 'fzf')
   pcall(require('telescope').load_extension, 'ui-select')
+  pcall(require('telescope').load_extension, 'cmdline')
 
   -- See `:help telescope.builtin`
   local builtin = require 'telescope.builtin'
@@ -561,8 +598,11 @@ do
   vim.keymap.set('n', '<leader>sd', builtin.diagnostics, { desc = '[S]earch [D]iagnostics' })
   vim.keymap.set('n', '<leader>sr', builtin.resume, { desc = '[S]earch [R]esume' })
   vim.keymap.set('n', '<leader>s.', builtin.oldfiles, { desc = '[S]earch Recent Files ("." for repeat)' })
-  vim.keymap.set('n', '<leader>sc', builtin.commands, { desc = '[S]earch [C]ommands' })
+  -- vim.keymap.set('n', '<leader>sc', builtin.commands, { desc = '[S]earch [C]ommands' })
   vim.keymap.set('n', '<leader><leader>', builtin.buffers, { desc = '[ ] Find existing buffers' })
+
+  -- Telescope cmdline
+  vim.api.nvim_set_keymap('n', '<leader>sc', ':Telescope cmdline<CR>', { noremap = true, desc = 'Cmdline' })
 
   -- Add Telescope-based LSP pickers when an LSP attaches to a buffer.
   -- If you later switch picker plugins, this is where to update these mappings.
@@ -737,7 +777,6 @@ do
     -- gopls = {},
     -- pyright = {},
     -- tsc = {},
-    --
     -- Some languages (like rust) have entire language plugins that can be useful:
     --    https://github.com/mrcjkb/rustaceanvim
     --
@@ -803,6 +842,8 @@ do
   -- You can press `g?` for help in this menu.
   local ensure_installed = vim.tbl_keys(servers or {})
   vim.list_extend(ensure_installed, {
+    'gdscript-formatter',
+    'gdtoolkit',
     -- You can add other tools here that you want Mason to install
   })
 
@@ -813,6 +854,19 @@ do
     vim.lsp.enable(name)
   end
 end
+
+-- GDScript / Godot LSP (set up separately to avoid startup timing issues)
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = 'gdscript',
+  callback = function()
+    vim.lsp.config('gdscript', {
+      -- Uncomment the next two lines if you have shared capabilities / on_attach
+      -- capabilities = capabilities,
+      -- on_attach = on_attach,
+    })
+    vim.lsp.enable 'gdscript'
+  end,
+})
 
 -- ============================================================
 -- SECTION 7: FORMATTING
@@ -868,8 +922,8 @@ do
   --    See the README about individual language/framework/plugin snippets:
   --    https://github.com/rafamadriz/friendly-snippets
   --
-  -- vim.pack.add { gh 'rafamadriz/friendly-snippets' }
-  -- require('luasnip.loaders.from_vscode').lazy_load()
+  vim.pack.add { gh 'rafamadriz/friendly-snippets' }
+  require('luasnip.loaders.from_vscode').lazy_load()
 
   -- [[ Autocomplete Engine ]]
   vim.pack.add { { src = gh 'saghen/blink.cmp', version = vim.version.range '1.*' } }
@@ -1019,11 +1073,12 @@ do
   -- require 'kickstart.plugins.lint'
   -- require 'kickstart.plugins.autopairs'
   -- require 'kickstart.plugins.neo-tree'
+  vim.pack.add { gh 'habamax/vim-godot' }
 
   -- NOTE: You can add your own plugins, configuration, etc. in `lua/custom/plugins/*.lua`.
   --
   -- For independent modules, uncomment the convenience loader:
-  -- require 'custom.plugins'
+  require 'custom.plugins'
   --
   -- `custom.plugins` automatically loads files from that directory, but their
   -- order is unspecified. If plugins depend on each other, keep them in the same
@@ -1033,6 +1088,7 @@ do
   -- require 'custom.plugins.colorscheme'
   -- require 'custom.plugins.ui'
   -- require 'custom.plugins.git'
+  require 'core'
 end
 
 -- The line beneath this is called `modeline`. See `:help modeline`
