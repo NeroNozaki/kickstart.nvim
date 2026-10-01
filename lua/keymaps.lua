@@ -56,10 +56,10 @@ vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' }
 --  Use CTRL+<hjkl> to switch between windows
 --
 --  See `:help wincmd` for a list of all window commands
-vim.keymap.set('n', '<C-h>', '<C-w><C-h>', { desc = 'Move focus to the left window' })
-vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right window' })
-vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
-vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
+vim.keymap.set('n', '<leader>wh', '<C-w><C-h>', { desc = 'Move focus to the left [W]indow' })
+vim.keymap.set('n', '<leader>wl', '<C-w><C-l>', { desc = 'Move focus to the right [W]indow' })
+vim.keymap.set('n', '<leader>wj', '<C-w><C-j>', { desc = 'Move focus to the lower [W]indow' })
+vim.keymap.set('n', '<leader>wk', '<C-w><C-k>', { desc = 'Move focus to the upper [W]indow' })
 
 -- NOTE: Some terminals have colliding keymaps or are not able to send distinct keycodes
 -- vim.keymap.set("n", "<C-S-h>", "<C-w>H", { desc = "Move window to the left" })
@@ -84,12 +84,32 @@ vim.keymap.set('i', '<C-Del>', '<C-o>dw', { desc = 'Delete next word' })
 vim.api.nvim_create_autocmd({ 'TextYankPost' }, {
   desc = 'Highlight when yanking (copying) text',
   group = vim.api.nvim_create_augroup('kickstart-highlight-yank', { clear = true }),
-  callback = function() vim.hl.hl_op() end,
+  callback = function() vim.hl.on_yank() end,
 })
 
 
 -- Close windows easier
-vim.keymap.set('n', '<leader>0', ':hid<CR>', { desc = 'Delete current window' })
-vim.keymap.set('n', '<leader>1', ':on<CR>', { desc = 'Delete other windows' })
+vim.keymap.set('n', '<leader>0', '<cmd>hid<CR>', { desc = 'Delete current window' })
+vim.keymap.set('n', '<leader>1', '<cmd>on<CR>', { desc = 'Delete other windows' })
+
+
+vim.keymap.set('n', '-', '<cmd>Oil<CR>')
+
+-- 2. Map Ctrl+V to paste in Insert and Command-line modes
+vim.keymap.set({"i", "c"}, "<C-v>", '<C-r>+', { desc = "Paste from system clipboard" })
+
+-- 3. Map Ctrl+C to copy (yank) the current selection in Visual mode
+vim.keymap.set("v", "<C-c>", '"+y`>a', { desc = "Copy to system clipboard" })
+
+-- 4. Map Ctrl+X to cut in Visual mode
+vim.keymap.set("v", "<C-x>", '"+x`>a', { desc = "Cut to system clipboard" })
+
+-- 5. Optional: Map Ctrl+Z for Undo in Normal and Insert modes
+vim.keymap.set("i", "<C-z>", "<cmd>undo<CR>", { desc = "Undo" })
+
+-- Safely remove any custom mapping for Ctrl-v in normal mode,
+-- restoring Neovim's default blockwise-visual behavior.
+pcall(vim.keymap.del, 'n', '<C-v>')
+
 
 -- vim: ts=2 sts=2 sw=2 et

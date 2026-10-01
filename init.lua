@@ -9,7 +9,6 @@
     lua/plugins/init.lua     -- loads plugin modules in order
     lua/plugins/*.lua        -- individual plugin groups
     lua/custom-plugins/      -- your own plugins (auto-loaded)
-    lua/core/                -- extra modules you require
     lua/snippets/            -- LuaSnip Lua snippets
 --]]
 

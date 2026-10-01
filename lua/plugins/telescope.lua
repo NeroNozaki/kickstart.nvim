@@ -24,7 +24,14 @@ require('telescope').setup {
   --
   --   },
   -- },
-  -- pickers = {}
+  pickers = {
+    buffers = {
+      sort_lastused = true,
+      ignore_current_buffer = true,
+      sorting_strategy = "descending",
+    },
+  },
+  path_display = { "filename_first"},
   extensions = {
     ['ui-select'] = { require('telescope.themes').get_dropdown() },
     cmdline = {
@@ -65,11 +72,11 @@ vim.keymap.set('n', '<leader>sg', builtin.live_grep, { desc = '[S]earch by [G]re
 vim.keymap.set('n', '<leader>sd', builtin.diagnostics, { desc = '[S]earch [D]iagnostics' })
 vim.keymap.set('n', '<leader>sr', builtin.resume, { desc = '[S]earch [R]esume' })
 vim.keymap.set('n', '<leader>s.', builtin.oldfiles, { desc = '[S]earch Recent Files ("." for repeat)' })
--- vim.keymap.set('n', '<leader>sc', builtin.commands, { desc = '[S]earch [C]ommands' })
+vim.keymap.set('n', '<leader>sc', builtin.commands, { desc = '[S]earch [C]ommands' })
 vim.keymap.set('n', '<leader><leader>', builtin.buffers, { desc = '[ ] Find existing buffers' })
 
 -- Telescope cmdline
-vim.api.nvim_set_keymap('n', '<leader>sc', ':Telescope cmdline<CR>', { noremap = true, desc = 'Cmdline' })
+-- vim.api.nvim_set_keymap('n', '<leader>sc', ':Telescope cmdline<CR>', { noremap = true, desc = 'Cmdline' })
 
 -- Add Telescope-based LSP pickers when an LSP attaches to a buffer.
 -- If you later switch picker plugins, this is where to update these mappings.
