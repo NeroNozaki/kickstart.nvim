@@ -7,6 +7,7 @@ require 'plugins.conform'
 require 'plugins.completion'
 require 'plugins.treesitter'
 require 'plugins.color-scheme'
+require 'plugins.mini'
 
 -- Optional / extra plugins and notes
 --

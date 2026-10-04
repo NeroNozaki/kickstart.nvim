@@ -56,10 +56,10 @@ vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' }
 --  Use CTRL+<hjkl> to switch between windows
 --
 --  See `:help wincmd` for a list of all window commands
-vim.keymap.set('n', '<C-h>', '<C-w><C-h>', { desc = 'Move focus to the left window' })
-vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right window' })
-vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
-vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
+vim.keymap.set('n', '<leader>wh', '<C-w><C-h>', { desc = 'Move focus to the left [W]indow' })
+vim.keymap.set('n', '<leader>wl', '<C-w><C-l>', { desc = 'Move focus to the right [W]indow' })
+vim.keymap.set('n', '<leader>wj', '<C-w><C-j>', { desc = 'Move focus to the lower [W]indow' })
+vim.keymap.set('n', '<leader>wk', '<C-w><C-k>', { desc = 'Move focus to the upper [W]indow' })
 
 -- NOTE: Some terminals have colliding keymaps or are not able to send distinct keycodes
 -- vim.keymap.set("n", "<C-S-h>", "<C-w>H", { desc = "Move window to the left" })
@@ -87,9 +87,13 @@ vim.api.nvim_create_autocmd({ 'TextYankPost' }, {
   callback = function() vim.hl.hl_op() end,
 })
 
-
 -- Close windows easier
 vim.keymap.set('n', '<leader>0', ':hid<CR>', { desc = 'Delete current window' })
 vim.keymap.set('n', '<leader>1', ':on<CR>', { desc = 'Delete other windows' })
+
+vim.keymap.set('n', '<M-j>', '<C-d>', { desc = 'Scroll down by half a screen' })
+vim.keymap.set('n', '<M-k>', '<C-u>', { desc = 'Scroll up by half a screen' })
+vim.keymap.set('n', '<C-M-j>', '<C-e>', { desc = 'Move the view port down one line' })
+vim.keymap.set('n', '<C-M-k>', '<C-y>', { desc = 'Move the view port up one line' })
 
 -- vim: ts=2 sts=2 sw=2 et

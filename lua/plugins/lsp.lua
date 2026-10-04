@@ -6,6 +6,24 @@ vim.pack.add { gh "habamax/vim-godot" }
 vim.pack.add { gh 'j-hui/fidget.nvim' }
 require('fidget').setup {}
 
+vim.diagnostic.config({
+  virtual_text = false,
+  virtual_lines = false,
+
+  signs = {
+    text = {
+      [vim.diagnostic.severity.ERROR] = "✘",
+      [vim.diagnostic.severity.WARN]  = "▲",
+      [vim.diagnostic.severity.INFO]  = "»",
+      [vim.diagnostic.severity.HINT]  = "⚑",
+    },
+  },
+  underline = true,
+
+  update_in_insert = false,
+  severity_sort = true,
+})
+
 --  This function gets run when an LSP attaches to a particular buffer.
 --    That is to say, every time a new file is opened that is associated with
 --    an lsp (for example, opening `main.rs` is associated with `rust_analyzer`) this
@@ -170,6 +188,22 @@ vim.api.nvim_create_autocmd('FileType', {
       -- on_attach = on_attach,
     })
     vim.lsp.enable 'gdscript'
+  end,
+})
+
+-- zig lsp config
+vim.lsp.config["zls"] = {
+  cmd = { "zls" },
+  filetypes = { "zig", "zir" },
+  root_markers = { "build.zig", "zls.json", ".git" },
+  settings = {
+  },
+}
+
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = 'zig',
+  callback = function()
+    vim.lsp.enable("zls")
   end,
 })
 
