@@ -91,8 +91,18 @@ vim.api.nvim_create_autocmd({ 'TextYankPost' }, {
 vim.keymap.set('n', '<leader>0', ':hid<CR>', { desc = 'Delete current window' })
 vim.keymap.set('n', '<leader>1', ':on<CR>', { desc = 'Delete other windows' })
 
-vim.keymap.set('n', '<M-j>', '<C-d>', { desc = 'Scroll down by half a screen' })
-vim.keymap.set('n', '<M-k>', '<C-u>', { desc = 'Scroll up by half a screen' })
+local function scroll_view(lines)
+  local view = vim.fn.winsaveview()
+  view.topline = view.topline + lines
+  vim.fn.winrestview(view)
+end
+
+vim.keymap.set('n', '<M-j>', function() scroll_view(math.floor(vim.api.nvim_win_get_height(0) / 2)) end,
+  { desc = 'Scroll down by half a screen' })
+
+vim.keymap.set('n', '<M-k>', function() scroll_view(-math.floor(vim.api.nvim_win_get_height(0) / 2)) end,
+  { desc = 'Scroll up by half a screen' })
+
 vim.keymap.set('n', '<C-M-j>', '<C-e>', { desc = 'Move the view port down one line' })
 vim.keymap.set('n', '<C-M-k>', '<C-y>', { desc = 'Move the view port up one line' })
 
