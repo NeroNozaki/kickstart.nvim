@@ -70,8 +70,7 @@ vim.keymap.set('n', '<leader>wk', '<C-w><C-k>', { desc = 'Move focus to the uppe
 -- Delete previous word (Ctrl-Backspace)
 vim.keymap.set('i', '<C-BS>', '<C-w>', { desc = 'Delete previous word' })
 -- Many terminals actually send <C-h> for Ctrl-Backspace
--- vim.keymap.set('i', '<C-h>', '<C-w>', { desc = 'Delete previous word' })
-
+vim.keymap.set('i', '<C-h>', '<C-w>', { desc = 'Delete previous word' })
 -- Delete next word (Ctrl-Delete)
 vim.keymap.set('i', '<C-Del>', '<C-o>dw', { desc = 'Delete next word' })
 
