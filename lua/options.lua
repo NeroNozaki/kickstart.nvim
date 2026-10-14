@@ -35,6 +35,9 @@ vim.o.showmode = false
 --  See `:help 'clipboard'`
 vim.schedule(function() vim.o.clipboard = 'unnamedplus' end)
 
+-- Gui colors
+vim.opt.termguicolors = true
+
 -- Enable break indent
 vim.o.breakindent = true
 
@@ -130,6 +133,13 @@ vim.api.nvim_create_autocmd("BufEnter", {
       end
     end
   end,
+})
+
+vim.api.nvim_create_autocmd("FileType", {
+    pattern = "*",
+    callback = function()
+        vim.opt_local.formatoptions:remove({ "o", })
+    end,
 })
 
 -- vim: ts=2 sts=2 sw=2 et

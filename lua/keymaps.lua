@@ -125,4 +125,11 @@ vim.keymap.set('n', '<M-k>', function() scroll_view(-math.floor(vim.api.nvim_win
 vim.keymap.set('n', '<C-M-j>', '<C-e>', { desc = 'Move the view port down one line' })
 vim.keymap.set('n', '<C-M-k>', '<C-y>', { desc = 'Move the view port up one line' })
 
+-- Visual movement for virtual lines
+vim.keymap.set({ "n", "x" }, "j", "gj")
+vim.keymap.set({ "n", "x" }, "k", "gk")
+vim.keymap.set({ "n", "x" }, "0", "g0")
+vim.keymap.set({ "n", "x" }, "^", "g^")
+vim.keymap.set({ "n", "x" }, "$", "g$")
+
 -- vim: ts=2 sts=2 sw=2 et
