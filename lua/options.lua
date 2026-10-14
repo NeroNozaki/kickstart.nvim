@@ -35,6 +35,9 @@ vim.o.showmode = false
 --  See `:help 'clipboard'`
 vim.schedule(function() vim.o.clipboard = 'unnamedplus' end)
 
+-- Gui colors
+vim.opt.termguicolors = true
+
 -- Enable break indent
 vim.o.breakindent = true
 
@@ -69,6 +72,9 @@ vim.o.splitbelow = true
 vim.o.list = true
 vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
 
+-- Treat underscores as word separators
+vim.opt.iskeyword:remove("_")
+
 -- Preview substitutions live, as you type!
 vim.o.inccommand = 'split'
 
@@ -88,11 +94,11 @@ vim.o.tabstop = 4
 vim.o.shiftwidth = 4
 vim.o.expandtab = true
 
--- vim.api.nvim_set_hl(0, "Normal",       {  })
-vim.api.nvim_set_hl(0, "NormalFloat",  { bg = "none" })
-vim.api.nvim_set_hl(0, "NormalNC",     { bg = "none" })
--- vim.api.nvim_set_hl(0, "EndOfBuffer",  {  })
--- vim.api.nvim_set_hl(0, "SignColumn",   {  })
+-- vim.api.nvim_set_hl(0, "Normal",       { bg = "none"  })
+-- vim.api.nvim_set_hl(0, "NormalFloat",  { bg = "none" })
+-- vim.api.nvim_set_hl(0, "NormalNC",     { bg = "none" })
+-- vim.api.nvim_set_hl(0, "EndOfBuffer",  { bg = "none"  })
+-- vim.api.nvim_set_hl(0, "SignColumn",   { bg = "none"  })
 
 -- Make help buffers actually show up as buffers
 vim.api.nvim_create_autocmd("FileType", {
@@ -130,6 +136,13 @@ vim.api.nvim_create_autocmd("BufEnter", {
       end
     end
   end,
+})
+
+vim.api.nvim_create_autocmd("FileType", {
+    pattern = "*",
+    callback = function()
+        vim.opt_local.formatoptions:remove({ "o", })
+    end,
 })
 
 -- vim: ts=2 sts=2 sw=2 et

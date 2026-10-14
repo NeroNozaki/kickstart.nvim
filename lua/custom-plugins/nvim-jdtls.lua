@@ -63,3 +63,16 @@ vim.api.nvim_create_autocmd('FileType', {
 		jdtls.start_or_attach(config)
 	end,
 })
+
+vim.api.nvim_create_autocmd("LspAttach", {
+    callback = function(args)
+        local client = vim.lsp.get_client_by_id(args.data.client_id)
+
+        if client and client.name == "jdtls" then
+            vim.lsp.semantic_tokens.enable(false, {
+                bufnr = args.buf,
+                client_id = client.id,
+            })
+        end
+    end,
+})
