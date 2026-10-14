@@ -30,8 +30,8 @@ require('telescope').setup {
       ignore_current_buffer = true,
       sorting_strategy = "descending",
     },
+    path_display = { "truncate" },
   },
-  path_display = { "filename_first" },
   extensions = {
     ['ui-select'] = { require('telescope.themes').get_dropdown() },
     cmdline = {

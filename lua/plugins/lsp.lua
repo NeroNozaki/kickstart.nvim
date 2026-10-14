@@ -198,11 +198,11 @@ vim.lsp.config["zls"] = {
   },
 }
 
--- vim.api.nvim_create_autocmd('FileType', {
---   pattern = 'zig',
---   callback = function()
---     vim.lsp.enable("zls")
---   end,
--- })
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = 'zig',
+  callback = function()
+    vim.lsp.enable("zls")
+  end,
+})
 
 -- vim: ts=2 sts=2 sw=2 et
