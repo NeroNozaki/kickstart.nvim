@@ -4,12 +4,10 @@ vim.api.nvim_create_autocmd('FileType', {
 	pattern = 'java',
 	callback = function()
 		-- ~/.config/nvim/ftplugin/java.lua
-		-- Uses the JDTLS you already have from Emacs (no Mason download)
 
 		local jdtls = require 'jdtls'
 
-		-- ↓↓↓ PUT THE REAL PATH YOU FOUND HERE ↓↓↓
-		local jdtls_install = vim.fn.expand '~/.emacs.d/share/eclipse.jdt.ls'  -- change this
+		local jdtls_install = vim.fn.expand '~/.emacs.d/share/eclipse.jdt.ls'
 
 		-- Platform-specific config folder
 		local config_dir = (vim.fn.has 'mac' == 1 and 'config_mac')
