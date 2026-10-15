@@ -34,6 +34,10 @@
       "rev": "f1e186e44d3b7f9ae918008e2c28ce37c6023d2d",
       "src": "https://github.com/lukas-reineke/indent-blankline.nvim"
     },
+    "kmonad-vim": {
+      "rev": "37978445197ab00edeb5b731e9ca90c2b141723f",
+      "src": "https://github.com/kmonad/kmonad-vim"
+    },
     "mason-lspconfig.nvim": {
       "rev": "b3298993d55fa194279b5eb9dbfb3a43da65cadf",
       "src": "https://github.com/mason-org/mason-lspconfig.nvim"

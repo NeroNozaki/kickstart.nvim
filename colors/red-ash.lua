@@ -61,7 +61,7 @@ local groups = {
   -- MiniStatusLine
   MiniStatuslineModeNormal  = { fg = c.bg, bg = c.red,    bold = true },
   MiniStatuslineModeInsert  = { fg = c.bg, bg = c.green,  bold = true },
-  MiniStatuslineModeCommand = { fg = c.bg, bg = c.orange, bold = true },
+  MiniStatuslineModeCommand = { fg = c.bg, bg = c.blue, bold = true },
   MiniStatuslineModeVisual  = { fg = c.bg, bg = c.purple, bold = true },
 
   -- Syntax
